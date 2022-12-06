@@ -1,0 +1,23 @@
+{
+  "name": "expierment2023",
+  "version": "1.0.0",
+  "description": "this is the script for running debugging experiment conducted by researchers from the DevX team at GMU",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alaboudi1/expierment2023.git"
+  },
+  "author": "Abdulaziz Alaboudi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Alaboudi1/expierment2023/issues"
+  },
+  "homepage": "https://github.com/Alaboudi1/expierment2023#readme",
+  "dependencies": {
+    "ora": "^6.1.2",
+    "yarn": "^1.22.19"
+  }
+}
