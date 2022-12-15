@@ -2,13 +2,6 @@ import ora from "ora";
 import fs from "fs";
 import { exec } from "child_process";
 import path from "path";
-import open from "open";
-import readline from "readline";
-
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
 
 const bugsBasePath = path.join(process.cwd(), "experiment", "bugs");
 const toolBasePath = path.join(process.cwd(), "experiment", "tool");
@@ -42,16 +35,6 @@ const npmInstall = (dir) => {
         return resolve();
       }
     });
-  });
-};
-// run npm start
-const npmStart = (dir) => {
-  return new Promise((resolve, reject) => {
-    exec(`npm run start `, { cwd: dir }).on("error", (err) => {
-      reject(err);
-    });
-
-    return resolve();
   });
 };
 
@@ -103,21 +86,6 @@ const setupTheTool = async () => {
     .catch((err) => {
       console.error(err);
     });
-};
-
-const experimentWithTool = async (bug) => {
-  // run the tool
-  return Promise.all([npmStart(bug), npmStart(toolBasePath), open(bug)]).catch(
-    (err) => {
-      console.error(err);
-    }
-  );
-};
-
-const experimentWithoutTool = async (bug) => {
-  npmStart(bug).catch((err) => {
-    console.error(err);
-  });
 };
 
 createFolder("experiment").then(() => {
