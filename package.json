@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/Alaboudi1/expierment2023#readme",
   "dependencies": {
-    "ora": "^6.1.2",
-    "yarn": "^1.22.19"
+    "open": "^8.4.0",
+    "ora": "^6.1.2"
   }
 }

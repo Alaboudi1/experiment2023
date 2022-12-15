@@ -2,6 +2,13 @@ import ora from "ora";
 import fs from "fs";
 import { exec } from "child_process";
 import path from "path";
+import open from "open";
+import readline from "readline";
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
 
 const bugsBasePath = path.join(process.cwd(), "experiment", "bugs");
 const toolBasePath = path.join(process.cwd(), "experiment", "tool");
@@ -28,11 +35,11 @@ const cloneRepo = (repo, dir) => {
 // run npm install
 const npmInstall = (dir) => {
   return new Promise((resolve, reject) => {
-    exec(`yarn `, { cwd: dir }, (err, stdout, stderr) => {
+    exec(`npm i  --force `, { cwd: dir }, (err, stdout, stderr) => {
       if (err) {
-        reject(err);
+        return reject(err);
       } else {
-        resolve();
+        return resolve();
       }
     });
   });
@@ -40,13 +47,11 @@ const npmInstall = (dir) => {
 // run npm start
 const npmStart = (dir) => {
   return new Promise((resolve, reject) => {
-    exec(`npm run start `, { cwd: dir }, (err, stdout, stderr) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve();
-      }
+    exec(`npm run start `, { cwd: dir }).on("error", (err) => {
+      reject(err);
     });
+
+    return resolve();
   });
 };
 
@@ -102,9 +107,11 @@ const setupTheTool = async () => {
 
 const experimentWithTool = async (bug) => {
   // run the tool
-  return Promise.all([npmStart(bug), npmStart(toolBasePath)]).catch((err) => {
-    console.error(err);
-  });
+  return Promise.all([npmStart(bug), npmStart(toolBasePath), open(bug)]).catch(
+    (err) => {
+      console.error(err);
+    }
+  );
 };
 
 const experimentWithoutTool = async (bug) => {
@@ -114,38 +121,9 @@ const experimentWithoutTool = async (bug) => {
 };
 
 createFolder("experiment").then(() => {
-  return Promise.all([setupBug(), setupTheTool()]).then(() => {
-    const q = ora().info(
-      "Please enter the group number and press enter to start the experiment"
-    );
-
-    process.stdin.on("data", (data) => {
-      const group = data.toString().trim();
-      if (group === "A" || group === "a") {
-        // hypothesizer with bug 1
-        experimentWithTool(BUG1);
-      } else if (group === "B" || group === "b") {
-        // hypothesizer with bug 2
-        experimentWithTool(BUG2);
-      } else if (group === "C" || group === "c") {
-        //  without hypothesizer bug 1
-        experimentWithoutTool(BUG1);
-      } else if (group === "D" || group === "d") {
-        //  without hypothesizer bug 2
-        experimentWithoutTool(BUG2);
-      }
-      q.color = "green";
-      q.text = "The experiment started!";
-      q.info("When you finish the experiment, please press 1 and enter");
-
-      process.stdin.on("data", (data) => {
-        const finish = data.toString().trim();
-        if (finish === "1") {
-          q.color = "green";
-          q.text = "The experiment finished!";
-          q.info("Thank you for your participation");
-        }
-      });
-    });
+  return Promise.all([setupBug(), setupTheTool()]).then(async () => {
+    await ora().succeed("Done!");
+    //exit the program
+    process.exit(0);
   });
 });
