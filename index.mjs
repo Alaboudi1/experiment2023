@@ -7,7 +7,7 @@ const bugsBasePath = path.join(process.cwd(), "experiment", "bugs");
 const toolBasePath = path.join(process.cwd(), "experiment", "tool");
 
 const BUG1 = path.join(bugsBasePath, "bug-1");
-const BUG2 = path.join(bugsBasePath, "bug-2");
+const BUG2 = path.join(bugsBasePath, "bug-3");
 
 const bugsRepo = "https://github.com/Alaboudi1/modernWebApplicationBugs.git";
 const toolRepo = "https://github.com/Alaboudi1/electron-hypothesizer.git";

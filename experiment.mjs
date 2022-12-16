@@ -7,7 +7,7 @@ const bugsBasePath = path.join(process.cwd(), "experiment", "bugs");
 const toolBasePath = path.join(process.cwd(), "experiment", "tool");
 
 const BUG1 = path.join(bugsBasePath, "bug-1");
-const BUG2 = path.join(bugsBasePath, "bug-2");
+const BUG2 = path.join(bugsBasePath, "bug-3");
 
 // get the params
 const group = process.argv.slice(2)[0];
@@ -32,9 +32,11 @@ const experimentWithTool = async (bug) => {
 };
 
 const experimentWithoutTool = async (bug) => {
-  npmStart(bug).catch((err) => {
-    console.error(err);
-  });
+  return Promise.all([npmStart(bug), open(bug)], open("localhost:3000")).catch(
+    (err) => {
+      console.error(err);
+    }
+  );
 };
 
 const runExperiment = async () => {
